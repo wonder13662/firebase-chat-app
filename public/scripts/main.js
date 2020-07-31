@@ -280,6 +280,12 @@ function resetMaterialTextfield(element) {
   element.parentNode.MaterialTextfield.boundUpdateClassesHandler();
 }
 
+function displayOrder(requester, customAddress, productPrice) {
+  orderContainerElement.querySelector('.requester').textContent = requester;
+  orderContainerElement.querySelector('.customer-address').textContent = customAddress;
+  orderContainerElement.querySelector('.product-price').textContent = productPrice;
+}
+
 // Template for messages.
 var MESSAGE_TEMPLATE =
     '<div class="message-container">' +
@@ -327,6 +333,10 @@ function createAndInsertMessage(id, timestamp) {
     let messageListNode = existingMessages[0];
 
     while (messageListNode) {
+      if(!messageListNode.getAttribute) {
+        break;
+      }
+
       const messageListNodeTime = messageListNode.getAttribute('timestamp');
 
       if (!messageListNodeTime) {
@@ -402,6 +412,7 @@ function checkSetup() {
 checkSetup();
 
 // Shortcuts to DOM Elements.
+var orderContainerElement = document.getElementById('order-container');
 var messageListElement = document.getElementById('messages');
 var messageFormElement = document.getElementById('message-form');
 var messageInputElement = document.getElementById('message');
@@ -440,12 +451,13 @@ initFirebaseAuth();
 // https://leo-chat-6829e.firebaseapp.com/?role=director
 signOut();
 var queryString = getQueryStringObject();
-console.log('role:',queryString.role);
 if(queryString.role && queryString.role === "driver") {
   signInDriver();
 } else {
   signInDirector();
 }
+
+displayOrder("KFC 강남구청점", "서울 강남구 언주로 137길 32(씨엔에스빌딩)바로고 본사 1층", "25,000원");
 
 // We load currently existing chat messages and listen to new ones.
 loadMessages();

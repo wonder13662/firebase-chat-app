@@ -58,6 +58,13 @@ main, #messages-card {
   display: flex;
   flex-direction: column;
 }
+#messages > .spacing {
+  width: 100%;
+  background: transparent;
+}
+#messages > .spacing > .inner-block {
+  height: 100px;
+}
 #message-filler {
   flex-grow: 1;
 }
@@ -201,5 +208,14 @@ main, #messages-card {
 }
 header {
   display: none !important;
+}
+#order-container{
+  position: absolute;
+  width: calc(100% - 60px);
+  background: #eee;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 20px;
+  box-shadow: 0 5px 8px 0px rgba(0, 0, 0, .2);
 }
 
