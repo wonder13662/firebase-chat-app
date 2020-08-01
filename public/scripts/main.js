@@ -224,6 +224,22 @@ function onMediaFileSelected(event) {
   }
 }
 
+// Toggle when an user clicked the order summary
+function onOrderSummaryClicked(e) {
+  console.log('onOrderSummaryClicked');
+
+  const classNameShrunk = "shrunk";
+  const classNameExpanded = "expanded";
+
+  if(orderContainerElement.classList.contains(classNameShrunk)) {
+    orderContainerElement.classList.remove(classNameShrunk);
+    orderContainerElement.classList.add(classNameExpanded);
+  } else if(orderContainerElement.classList.contains(classNameExpanded)) {
+    orderContainerElement.classList.remove(classNameExpanded);
+    orderContainerElement.classList.add(classNameShrunk);
+  }
+}
+
 // Triggered when the send new message form is submitted.
 function onMessageFormSubmit(e) {
   e.preventDefault();
@@ -287,14 +303,20 @@ function checkSignedInWithMessage() {
 
 // Resets the given MaterialTextField.
 function resetMaterialTextfield(element) {
+  if(!element) return;
   element.value = '';
+
+  if( !element.parentNode ||
+      !element.parentNode.MaterialTextfield ||
+      !element.parentNode.MaterialTextfield.boundUpdateClassesHandler) return;
+
   element.parentNode.MaterialTextfield.boundUpdateClassesHandler();
 }
 
 function displayOrder(requester, customAddress, productPrice) {
   orderContainerElement.querySelector('.requester').textContent = requester;
   orderContainerElement.querySelector('.customer-address').textContent = customAddress;
-  orderContainerElement.querySelector('.product-price').textContent = productPrice;
+  orderContainerElement.querySelector('.product-price span').textContent = productPrice;
 }
 
 // Template for messages.
@@ -413,10 +435,8 @@ function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
   const currentUserDisplayName = getUserName();
   let div = null;
   if(name === currentUserDisplayName) {
-    console.log('나의 메시지');
     div = displayMyMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
   } else {
-    console.log('다른 사람의 메시지');
     div = displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
   }
 
@@ -474,6 +494,9 @@ var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
+
+// Toggle for the order summary
+orderContainerElement.addEventListener('click', onOrderSummaryClicked);
 
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);

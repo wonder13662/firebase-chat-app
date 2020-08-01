@@ -295,4 +295,36 @@ header {
   box-shadow: 1.5px 2px 5px rgba(155, 155, 170, 0.4);
   z-index: 100;
 }
+#order-container.shrunk .detail {
+  display:none;
+}
+#order-container .requester {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1.3rem;
+  line-height: 2rem;
+}
+
+#order-container .customer-address {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+#order-container .product-price {
+  border-top: 1px solid #e0e0e0;
+  text-align: right;
+  font-style: normal;
+  font-size: 1.3rem;
+  line-height: 2rem;
+  padding-top: 1rem;
+}
+#order-container .product-price span {
+  font-weight: bold;
+}
+#order-container .product-price label {
+  float: left;
+}
 
