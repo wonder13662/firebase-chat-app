@@ -31,11 +31,11 @@ function signInByGoogleAccount() {
 }
 
 function signInDirector() {
-  signInByEmailNPassword("wdjeong@barogo.com", "barogobaroba");
+  signInByEmailNPassword("wonder13662test@gmail.com", "barogobaroba");
 }
 
 function signInDriver() {
-  signInByEmailNPassword("wonder13662@gmail.com", "barogobaroba");
+  signInByEmailNPassword("wonder13662test1@gmail.com", "barogobaroba");
 }
 
 function signInByEmailNPassword(email, password) {
@@ -104,6 +104,7 @@ function loadMessages() {
         deleteMessage(change.doc.id);
       } else {
         var message = change.doc.data();
+        console.log('message: ',message);
         displayMessage(change.doc.id, message.timestamp, message.name,
                        message.text, message.profilePicUrl, message.imageUrl);
       }
