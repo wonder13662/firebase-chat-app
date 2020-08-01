@@ -105,9 +105,7 @@ function loadMessages() {
       } else {
         var message = change.doc.data();
 
-        console.log('message: ',message);
-        console.log('seconds: ',message.timestamp.seconds);
-        const date = new Date(message.timestamp.seconds * 1000);
+        const date = !message.timestamp?new Date():new Date(message.timestamp.seconds * 1000);
         const ampm = date.getHours()>11?"PM":"AM";
         let hours = date.getHours()%12;
         hours = hours<10?`0${hours}`:`${hours}`;
