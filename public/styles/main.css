@@ -69,9 +69,13 @@ main, #messages-card {
   width: 100%;
   background: transparent;
 }
-#messages > .spacing > .inner-block {
-  height: 150px;
+
+#messages > .spacing > .inner-block > #order-container {
+  margin: 0;
+  position: relative;
+  visibility: hidden;
 }
+
 #message-filler {
   flex-grow: 1;
 }

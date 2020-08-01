@@ -314,9 +314,14 @@ function resetMaterialTextfield(element) {
 }
 
 function displayOrder(requester, customAddress, productPrice) {
+  // 1. 실제 보여지는 상단 고정된 상품요약정보
   orderContainerElement.querySelector('.requester').textContent = requester;
   orderContainerElement.querySelector('.customer-address').textContent = customAddress;
   orderContainerElement.querySelector('.product-price span').textContent = productPrice;
+
+  // 2. 메시지 스크롤 리스트에 포함되는 상품요약정보
+  const clone = orderContainerElement.cloneNode(true);
+  messageListElement.querySelector('.spacing .inner-block').appendChild(clone);
 }
 
 // Template for messages.
