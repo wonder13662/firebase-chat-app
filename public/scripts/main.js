@@ -104,9 +104,19 @@ function loadMessages() {
         deleteMessage(change.doc.id);
       } else {
         var message = change.doc.data();
+
         console.log('message: ',message);
+        console.log('seconds: ',message.timestamp.seconds);
+        const date = new Date(message.timestamp.seconds * 1000);
+        const ampm = date.getHours()>11?"PM":"AM";
+        let hours = date.getHours()%12;
+        hours = hours<10?`0${hours}`:`${hours}`;
+        const minutes = date.getMinutes()<10?`0${date.getMinutes()}`:`${date.getMinutes()}`;
+        const seconds = date.getSeconds()<10?`0${date.getSeconds()}`:`${date.getSeconds()}`;
+        const timeStr = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getUTCDate()} ${hours}:${minutes}:${seconds} ${ampm}`;
+
         displayMessage(change.doc.id, message.timestamp, message.name,
-                       message.text, message.profilePicUrl, message.imageUrl);
+                       message.text, message.profilePicUrl, message.imageUrl, timeStr);
       }
     });
   });
@@ -290,9 +300,14 @@ function displayOrder(requester, customAddress, productPrice) {
 // Template for messages.
 var MESSAGE_TEMPLATE =
     '<div class="message-container">' +
-      '<div class="spacing"><div class="pic"></div></div>' +
-      '<div class="message"></div>' +
-      '<div class="name"></div>' +
+      '<div class="left-column spacing"><div class="pic"></div></div>' +
+      '<div class="right-column">' +
+        '<div class="name"></div>' +
+        '<div class="message">' +
+          '<div class="balloon"></div>' +
+        '</div>' +
+        '<div class="timestamp"></div>' +
+      '</div>' +
     '</div>';
 
 // Adds a size to Google Profile pics URLs.
@@ -360,7 +375,7 @@ function createAndInsertMessage(id, timestamp) {
 }
 
 // Displays a Message in the UI.
-function displayMessage(id, timestamp, name, text, picUrl, imageUrl) {
+function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
   var div = document.getElementById(id) || createAndInsertMessage(id, timestamp);
 
   // profile picture
@@ -370,19 +385,22 @@ function displayMessage(id, timestamp, name, text, picUrl, imageUrl) {
 
   div.querySelector('.name').textContent = name;
   var messageElement = div.querySelector('.message');
+  var balloonElement = messageElement.querySelector('.balloon');
+
+  div.querySelector('.timestamp').textContent = timeStr;
 
   if (text) { // If the message is text.
-    messageElement.textContent = text;
+    balloonElement.textContent = text;
     // Replace all line breaks by <br>.
-    messageElement.innerHTML = messageElement.innerHTML.replace(/\n/g, '<br>');
+    balloonElement.innerHTML = balloonElement.innerHTML.replace(/\n/g, '<br>');
   } else if (imageUrl) { // If the message is an image.
     var image = document.createElement('img');
     image.addEventListener('load', function() {
-      messageListElement.scrollTop = messageListElement.scrollHeight;
+      balloonElement.scrollTop = balloonElement.scrollHeight;
     });
     image.src = imageUrl + '&' + new Date().getTime();
-    messageElement.innerHTML = '';
-    messageElement.appendChild(image);
+    balloonElement.innerHTML = '';
+    balloonElement.appendChild(image);
   }
   // Show the card fading-in and scroll to view the new message.
   setTimeout(function() {div.classList.add('visible')}, 1);
