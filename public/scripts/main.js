@@ -30,16 +30,18 @@ function signInByGoogleAccount() {
   firebase.auth().signInWithPopup(provider);
 }
 
-function signInDirector() {
-  signInByEmailNPassword("wonder13662test@gmail.com", "barogobaroba");
+function signInDirector(callbackOnLoggedIn) {
+  signInByEmailNPassword("wonder13662test@gmail.com", "barogobaroba", callbackOnLoggedIn);
 }
 
-function signInDriver() {
-  signInByEmailNPassword("wonder13662test1@gmail.com", "barogobaroba");
+function signInDriver(callbackOnLoggedIn) {
+  signInByEmailNPassword("wonder13662test1@gmail.com", "barogobaroba", callbackOnLoggedIn);
 }
 
-function signInByEmailNPassword(email, password) {
-  firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+function signInByEmailNPassword(email, password, callbackOnLoggedIn) {
+  firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
+    if(callbackOnLoggedIn) callbackOnLoggedIn();
+  }).catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -97,6 +99,7 @@ function loadMessages() {
                   .orderBy('timestamp', 'desc')
                   .limit(12);
 
+
   // Start listening to the query.
   query.onSnapshot(function(snapshot) {
     snapshot.docChanges().forEach(function(change) {
@@ -104,7 +107,6 @@ function loadMessages() {
         deleteMessage(change.doc.id);
       } else {
         var message = change.doc.data();
-
         const date = !message.timestamp?new Date():new Date(message.timestamp.seconds * 1000);
         const ampm = date.getHours()>11?"PM":"AM";
         let hours = date.getHours()%12;
@@ -296,8 +298,8 @@ function displayOrder(requester, customAddress, productPrice) {
 }
 
 // Template for messages.
-var MESSAGE_TEMPLATE =
-    '<div class="message-container">' +
+const OTHER_MESSAGE_TEMPLATE =
+    '<div class="message-container other-message">' +
       '<div class="left-column spacing"><div class="pic"></div></div>' +
       '<div class="right-column">' +
         '<div class="name"></div>' +
@@ -307,6 +309,17 @@ var MESSAGE_TEMPLATE =
         '<div class="timestamp"></div>' +
       '</div>' +
     '</div>';
+
+const MY_MESSAGE_TEMPLATE =
+'<div class="message-container my-message">' +
+  '<div class="left-column spacing">&nbsp;</div>' +
+  '<div class="right-column">' +
+    '<div class="message">' +
+      '<div class="balloon"></div>' +
+    '</div>' +
+    '<div class="timestamp"></div>' +
+  '</div>' +
+'</div>';
 
 // Adds a size to Google Profile pics URLs.
 function addSizeToGoogleProfilePic(url) {
@@ -328,9 +341,17 @@ function deleteMessage(id) {
   }
 }
 
-function createAndInsertMessage(id, timestamp) {
+function createAndInsertOtherMessage(id, timestamp) {
+  return createAndInsertMessage(id, timestamp, OTHER_MESSAGE_TEMPLATE);
+}
+
+function createAndInsertMyMessage(id, timestamp) {
+  return createAndInsertMessage(id, timestamp, MY_MESSAGE_TEMPLATE);
+}
+
+function createAndInsertMessage(id, timestamp, template) {
   const container = document.createElement('div');
-  container.innerHTML = MESSAGE_TEMPLATE;
+  container.innerHTML = template;
   const div = container.firstChild;
   div.setAttribute('id', id);
 
@@ -373,8 +394,8 @@ function createAndInsertMessage(id, timestamp) {
 }
 
 // Displays a Message in the UI.
-function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
-  var div = document.getElementById(id) || createAndInsertMessage(id, timestamp);
+function displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
+  var div = document.getElementById(id) || createAndInsertOtherMessage(id, timestamp);
 
   // profile picture
   if (picUrl) {
@@ -382,6 +403,24 @@ function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
   }
 
   div.querySelector('.name').textContent = name;
+
+  return div;
+}
+function displayMyMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
+  return document.getElementById(id) || createAndInsertMyMessage(id, timestamp);
+}
+function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
+  const currentUserDisplayName = getUserName();
+  let div = null;
+  if(name === currentUserDisplayName) {
+    console.log('나의 메시지');
+    div = displayMyMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
+  } else {
+    console.log('다른 사람의 메시지');
+    div = displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
+  }
+
+  // 공통 속성 처리
   var messageElement = div.querySelector('.message');
   var balloonElement = messageElement.querySelector('.balloon');
 
@@ -391,15 +430,8 @@ function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
     balloonElement.textContent = text;
     // Replace all line breaks by <br>.
     balloonElement.innerHTML = balloonElement.innerHTML.replace(/\n/g, '<br>');
-  } else if (imageUrl) { // If the message is an image.
-    var image = document.createElement('img');
-    image.addEventListener('load', function() {
-      balloonElement.scrollTop = balloonElement.scrollHeight;
-    });
-    image.src = imageUrl + '&' + new Date().getTime();
-    balloonElement.innerHTML = '';
-    balloonElement.appendChild(image);
   }
+
   // Show the card fading-in and scroll to view the new message.
   setTimeout(function() {div.classList.add('visible')}, 1);
   messageListElement.scrollTop = messageListElement.scrollHeight;
@@ -469,15 +501,17 @@ initFirebaseAuth();
 signOut();
 var queryString = getQueryStringObject();
 if(queryString.role && queryString.role === "driver") {
-  signInDriver();
+  signInDriver(callbackOnLoggedInByEmailNPassword);
 } else {
-  signInDirector();
+  signInDirector(callbackOnLoggedInByEmailNPassword);
 }
 
+function callbackOnLoggedInByEmailNPassword() {
+  // We load currently existing chat messages and listen to new ones.
+  loadMessages();
+}
 displayOrder("KFC 강남구청점", "서울 강남구 언주로 137길 32(씨엔에스빌딩)바로고 본사 1층", "25,000원");
 
-// We load currently existing chat messages and listen to new ones.
-loadMessages();
 
 function getQueryStringObject() {
   var a = window.location.search.substr(1).split('&');

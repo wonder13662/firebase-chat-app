@@ -102,6 +102,25 @@ main, #messages-card {
   color: #bbb;
   font-size: 12px;
 }
+.message-container.my-message .left-column {
+  flex: 1;
+}
+.message-container.my-message .right-column {
+  flex: 0 1 1;
+}
+.message-container.my-message .message {
+  width: 100%;
+  padding: 5px 10px;
+  text-align: right;
+}
+.message-container.my-message .timestamp {
+  text-align: right;
+  width: 100%;
+}
+.message-container.my-message .message .balloon {
+  background: #FF8383;
+  color: white;
+}
 .message-container.visible {
   opacity: 1;
 }
