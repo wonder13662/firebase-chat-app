@@ -53,14 +53,14 @@ main, #messages-card {
 }
 #messages {
   overflow-y: auto;
+  margin-top: 10px;
   margin-bottom: 10px;
-  height: calc(100% - 120px);
+  height: calc(100% - 130px);
   display: flex;
   flex-direction: column;
-
   padding: 10px;
-  background: #fff2ef;
-  border-radius: 10px;
+  background: #F2F2F5;
+  border-radius: 20px;
 }
 #messages > .spacing {
   width: 100%;
@@ -214,12 +214,12 @@ header {
 }
 #order-container{
   position: absolute;
-  width: calc(100% - 60px);
-  background: #eee;
+  width: calc(100% - 100px);
+  background: #fff;
   padding: 20px;
-  margin: 10px;
-  border-radius: 20px;
-  box-shadow: 0 5px 8px 0px rgba(0, 0, 0, .2);
+  margin: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 1.5px 2px 5px rgba(155, 155, 170, 0.4);
   z-index: 100;
 }
 
