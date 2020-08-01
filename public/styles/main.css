@@ -154,6 +154,12 @@ main, #messages-card {
   width: 100px;
   margin: 15px 0 0 10px;
   border-radius: 18px;
+
+  background: #FF8383;
+  color: white;
+}
+#message-form button[disabled] {
+  background: #FF838340;
 }
 .mdl-card {
   min-height: 0;
