@@ -114,14 +114,35 @@ main, #messages-card {
 #message-form {
   display: flex;
   flex-direction: row;
-  width: calc(100% - 48px);
-  float: left;
+  padding: 0px 20px;
 }
 #image-form {
-  display: flex;
+  /* display: flex; */
+  display: none;
   flex-direction: row;
   width: 48px;
   float: right;
+}
+#input-container {
+  background: #fff;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: inset 2px 2px 10px rgba(174, 174, 192, 0.25), inset -2px -2px 2px rgba(255, 255, 255, 0.7), inset 2px 2px 2px rgba(174, 174, 192, 0.2);
+}
+#input-container input {
+  border:0;
+  display: block;
+  font-size: 16px;
+  font-family: "Helvetica","Arial",sans-serif;
+  margin: 0;
+  padding: 4px 0;
+  width: 100%;
+  background: 0 0;
+  text-align: left;
+  color: inherit;
+}
+#input-container input:focus {
+  outline: none;
 }
 #message-form .mdl-textfield {
   width: calc(100% - 100px);
@@ -129,6 +150,7 @@ main, #messages-card {
 #message-form button, #image-form button {
   width: 100px;
   margin: 15px 0 0 10px;
+  border-radius: 18px;
 }
 .mdl-card {
   min-height: 0;
