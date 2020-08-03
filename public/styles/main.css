@@ -160,6 +160,14 @@ main, #messages-card {
   font-size: 12px;
   box-sizing: border-box;
 }
+.message-container .right-column .name span {
+  padding: 5px;
+  font-style: normal;
+  background-color: #b5b5b5;
+  color: white;
+  border-radius: 15px;
+  margin: 0 0 0 5px;
+}
 #message-form {
   display: flex;
   flex-direction: row;

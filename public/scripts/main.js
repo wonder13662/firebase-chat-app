@@ -73,6 +73,17 @@ function getUserName() {
   return firebase.auth().currentUser.displayName;
 }
 
+// Returns the signed-in user's tags.
+function getUserTags(name) {
+  if(name === '김드라이버') {
+    return ['#청담', '#신입'];
+  } else if(name === '박디렉터') {
+    return ['#허브장', '#팀장'];
+  }
+
+  return [];
+}
+
 // Returns true if a user is signed-in.
 function isUserSignedIn() {
   return !!firebase.auth().currentUser;
@@ -429,7 +440,18 @@ function displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeSt
     div.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(picUrl) + ')';
   }
 
-  div.querySelector('.name').textContent = name;
+  const nameElement = div.querySelector('.name');
+  nameElement.textContent = name;
+
+  // insert user tags
+  const tags = getUserTags(name);
+  // const tagsElement = div.querySelector('.tags');
+  tags.forEach(tag => {
+    console.log('tag: ',tag);
+    const tagSpan = document.createElement('span');
+    tagSpan.textContent = tag;
+    nameElement.appendChild(tagSpan);
+  });
 
   return div;
 }
