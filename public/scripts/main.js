@@ -496,18 +496,38 @@ function displayPreset({ parent, presetArr, callbackOnClick }) {
   // draw new presets
   presetArr.forEach(preset => {
     const spanElement = document.createElement('span');
+    parent?spanElement.classList.add("child-depth"):spanElement.classList.add("parent-depth");
+
     spanElement.textContent = preset.name;
     presetContainerElement.appendChild(spanElement);
 
+    function removeEvents() {
+      spanElement.removeEventListener('click', this);
+      spanElement.removeEventListener('touchstart', this);
+      spanElement.removeEventListener('touchmove', this);
+      spanElement.removeEventListener('touchend', this);
+      spanElement.removeEventListener('touchcancel', this);
+    }
+
     spanElement.addEventListener('click', function() {
       callbackOnClick({ parent, preset });
-      spanElement.removeEventListener('click', this);
-      spanElement.removeEventListener('touchend', this);
+      removeEvents();
+    });
+    let touchmove = false;
+    spanElement.addEventListener('touchstart', function() {
+      touchmove = false;
+    });
+    spanElement.addEventListener('touchmove', function() {
+      touchmove = true;
+    });
+    spanElement.addEventListener('touchcancel', function() {
+      touchmove = false;
     });
     spanElement.addEventListener('touchend', function() {
-      callbackOnClick({ parent, preset });
-      spanElement.removeEventListener('click', this);
-      spanElement.removeEventListener('touchend', this);
+      if(!touchmove) {
+        callbackOnClick({ parent, preset });
+        removeEvents();
+      }
     });
   });
 }
