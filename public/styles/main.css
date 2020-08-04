@@ -70,6 +70,7 @@ main, #messages-card {
 #messages > .spacing {
   width: 100%;
   background: transparent;
+  padding-bottom: 20px;
 }
 
 #messages > .spacing > .inner-block > #order-container {
@@ -81,57 +82,13 @@ main, #messages-card {
 #message-filler {
   flex-grow: 1;
 }
-.message-container:first-of-type {
-  border-top-width: 0;
-}
+
 .message-container {
   position: relative;
-  display: flex;
-  flex-direction: row;
-
-  margin-top: 10px;
-  padding-top: 10px;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
+  margin-bottom: 20px;
 }
-.message-container .left-column {
-  flex: 0 0 30px;
-}
-.message-container .right-column {
-  flex: 1;
-}
-.message-container .right-column .message .balloon {
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  display: inline-block;
-}
-.message-container .right-column .timestamp {
-  padding-left: 7px;
-  color: #bbb;
-  font-size: 12px;
-}
-.message-container.my-message .left-column {
-  flex: 1;
-}
-.message-container.my-message .right-column {
-  flex: 0 1 1;
-}
-.message-container.my-message .message {
-  width: 100%;
-  padding: 5px 7px;
+.message-container.my-message {
   text-align: right;
-}
-.message-container.my-message .timestamp {
-  text-align: right;
-  width: 100%;
-}
-.message-container.my-message .message .balloon {
-  background: #FF8383;
-  color: white;
-}
-.message-container.visible {
-  opacity: 1;
 }
 .message-container .pic {
   background-image: url('/images/profile_placeholder.png');
@@ -140,6 +97,12 @@ main, #messages-card {
   height: 30px;
   background-size: 30px;
   border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.message-container .info-box {
+  padding-left: 40px;
 }
 .message-container .spacing {
   display: table-cell;
@@ -148,21 +111,31 @@ main, #messages-card {
 .message-container .message {
   display: block;
   width: calc(100% - 40px);
-  padding: 5px 0 5px 10px;
+  padding: 5px 0;
 }
-.message-container .right-column {
-  position: relative;
+.message-container .message .balloon {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
 }
-.message-container .right-column .name {
+.message-container.my-message .message {
+  width: 100%;
+}
+.message-container.my-message .message .balloon {
+  background: #FF8383;
+  color: white;
+}
+.message-container .name {
   display: block;
   width: 100%;
-  padding-left: 10px;
   color: #bbb;
   font-style: italic;
   font-size: 12px;
   box-sizing: border-box;
+  padding-bottom: 5px;
 }
-.message-container .right-column .name span {
+.message-container .name span {
   padding: 5px;
   font-style: normal;
   background-color: #b5b5b5;
@@ -170,6 +143,12 @@ main, #messages-card {
   border-radius: 15px;
   margin: 0 0 0 5px;
 }
+.message-container .timestamp {
+  color: #bbb;
+  font-size: 12px;
+}
+
+
 #message-form {
   display: flex;
   flex-direction: row;

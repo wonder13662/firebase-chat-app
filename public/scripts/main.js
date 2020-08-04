@@ -337,26 +337,23 @@ function displayOrder(requester, customAddress, productPrice) {
 
 // Template for messages.
 const OTHER_MESSAGE_TEMPLATE =
-    '<div class="message-container other-message">' +
-      '<div class="left-column spacing"><div class="pic"></div></div>' +
-      '<div class="right-column">' +
-        '<div class="name"></div>' +
-        '<div class="message">' +
-          '<div class="balloon"></div>' +
-        '</div>' +
-        '<div class="timestamp"></div>' +
-      '</div>' +
-    '</div>';
-
-const MY_MESSAGE_TEMPLATE =
-'<div class="message-container my-message">' +
-  '<div class="left-column spacing">&nbsp;</div>' +
-  '<div class="right-column">' +
+'<div class="message-container">' +
+  '<div class="pic"></div>' +
+  '<div class="info-box">' +
+    '<div class="name"></div>' +
     '<div class="message">' +
       '<div class="balloon"></div>' +
     '</div>' +
     '<div class="timestamp"></div>' +
   '</div>' +
+'</div>';
+
+const MY_MESSAGE_TEMPLATE =
+'<div class="message-container my-message">' +
+  '<div class="message">' +
+  '<div class="balloon"></div>' +
+    '</div>' +
+  '<div class="timestamp"></div>' +
 '</div>';
 
 // Adds a size to Google Profile pics URLs.
