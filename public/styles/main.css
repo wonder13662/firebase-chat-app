@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
- html, body {
+html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+/* stop body scroll */
+body {
+  overflow:hidden;
+  position:fixed;
+  top:0;
+  bottom: 0;
 }
 main, #messages-card {
   height: 100%;
