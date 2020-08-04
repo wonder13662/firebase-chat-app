@@ -76,6 +76,8 @@ main, #messages-card {
 }
 #presets {
   padding: 15px 0px;
+  overflow: auto;
+  white-space: nowrap;
 }
 #presets > span {
   padding: 10px;
