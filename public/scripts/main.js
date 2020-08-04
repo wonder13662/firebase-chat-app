@@ -15,7 +15,161 @@
  */
 'use strict';
 
-// TODO List
+// Message preset
+const presets = [
+  {
+    name: '추가요금',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '거리',
+        nextPresets: []
+      },
+      {
+        name: '날씨',
+        nextPresets: []
+      },
+      {
+        name: '무게',
+        nextPresets: []
+      },
+      {
+        name: '권역외',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '배송지연',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '5분 지연',
+        nextPresets: []
+      },
+      {
+        name: '10분 지연',
+        nextPresets: []
+      },
+      {
+        name: '15분 지연',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '배송실수',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '배송크로스',
+        nextPresets: []
+      },
+      {
+        name: '흘림/훼손',
+        nextPresets: []
+      },
+      {
+        name: '요청사항 불이행',
+        nextPresets: []
+      },
+      {
+        name: '다른 배송 상품',
+        nextPresets: []
+      },
+      {
+        name: '상품누락',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '배송상태변경',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '픽업중',
+        nextPresets: []
+      },
+      {
+        name: '배송중',
+        nextPresets: []
+      },
+      {
+        name: '배송완료',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '픽업지',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '상품누락',
+        nextPresets: []
+      },
+      {
+        name: '포장불량',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '주소',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '주소다름',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '고객',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '응답없음',
+        nextPresets: []
+      }
+    ]
+  },
+  {
+    name: '디렉터',
+    nextPresets: [
+      {
+        name: 'Home',
+        nextPresets: []
+      },
+      {
+        name: '배차요청',
+        nextPresets: []
+      }
+    ]
+  }
+];
 
 // Signs-in Friendly Chat.
 function signIn() {
@@ -335,6 +489,29 @@ function displayOrder(requester, customAddress, productPrice) {
   messageListElement.querySelector('.spacing .inner-block').appendChild(clone);
 }
 
+function displayPreset({ parent, presetArr, callbackOnClick }) {
+  // remove previous preset
+  presetContainerElement.textContent = '';
+
+  // draw new presets
+  presetArr.forEach(preset => {
+    const spanElement = document.createElement('span');
+    spanElement.textContent = preset.name;
+    presetContainerElement.appendChild(spanElement);
+
+    spanElement.addEventListener('click', function() {
+      callbackOnClick({ parent, preset });
+      spanElement.removeEventListener('click', this);
+      spanElement.removeEventListener('touchend', this);
+    });
+    spanElement.addEventListener('touchend', function() {
+      callbackOnClick({ parent, preset });
+      spanElement.removeEventListener('click', this);
+      spanElement.removeEventListener('touchend', this);
+    });
+  });
+}
+
 // Template for messages.
 const OTHER_MESSAGE_TEMPLATE =
 '<div class="message-container">' +
@@ -444,7 +621,6 @@ function displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeSt
   const tags = getUserTags(name);
   // const tagsElement = div.querySelector('.tags');
   tags.forEach(tag => {
-    console.log('tag: ',tag);
     const tagSpan = document.createElement('span');
     tagSpan.textContent = tag;
     nameElement.appendChild(tagSpan);
@@ -506,6 +682,7 @@ checkSetup();
 
 // Shortcuts to DOM Elements.
 var orderContainerElement = document.getElementById('order-container');
+var presetContainerElement = document.getElementById('presets');
 var messageListElement = document.getElementById('messages');
 var messageFormElement = document.getElementById('message-form');
 var messageInputElement = document.getElementById('message');
@@ -561,7 +738,37 @@ function callbackOnLoggedInByEmailNPassword() {
   loadMessages();
 }
 displayOrder("KFC 강남구청점", "서울 강남구 언주로 137길 32(씨엔에스빌딩)바로고 본사 1층", "25,000원");
-
+displayPreset({
+  parent:null,
+  presetArr:presets,
+  callbackOnClick:onClick1DepthPreset
+});
+function onClick1DepthPreset({ parent, preset }) {
+  if(preset.nextPresets && preset.nextPresets.length > 0) {
+    displayPreset({
+      parent:preset,
+      presetArr:preset.nextPresets,
+      callbackOnClick:onClick2DepthPreset
+    });
+  } else {
+    // Send message as Preset
+    if(preset.name !== 'Home') {
+      saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+    }
+  }
+}
+function onClick2DepthPreset({ parent, preset }) {
+  // Send message as Preset
+  if(preset.name !== 'Home') {
+    saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+  }
+  // Draw 1 depth preset
+  displayPreset({
+      parent:null,
+      presetArr:presets,
+      callbackOnClick:onClick1DepthPreset
+  });
+}
 
 function getQueryStringObject() {
   var a = window.location.search.substr(1).split('&');
