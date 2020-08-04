@@ -85,6 +85,7 @@ main, #messages-card {
   border-radius: 20px;
   margin: 0px 10px 0px 0px;
   font-weight: bold;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
 }
 #messages {
   height: calc(100% - 40px);
