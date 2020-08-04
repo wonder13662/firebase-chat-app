@@ -524,6 +524,9 @@ orderContainerElement.addEventListener('click', onOrderSummaryClicked);
 
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);
+submitButtonElement.addEventListener("touchend", onMessageFormSubmit, false);
+
+// submitButtonElement
 signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
