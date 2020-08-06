@@ -354,6 +354,9 @@ header {
   box-shadow: 1.5px 2px 5px rgba(155, 155, 170, 0.4);
   z-index: 100;
 }
+#order-container.hide {
+  display: none;
+}
 #order-container .requester {
   font-style: normal;
   font-weight: bold;

@@ -495,6 +495,9 @@ function displayOrder(requester, customAddress, productPrice) {
     orderContainerElement.querySelector('.driver').classList.add('hide');
   }
 
+  // 88. 화면에 오더요약정보 노출
+  orderContainerElement.classList.remove('hide');
+
   // 99. 메시지 스크롤 리스트에 포함되는 상품요약정보
   const clone = orderContainerElement.cloneNode(true);
   messageListElement.querySelector('.spacing .inner-block').appendChild(clone);
