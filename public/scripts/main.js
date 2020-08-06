@@ -272,8 +272,7 @@ function loadMessages() {
   var query = firebase.firestore()
                   .collection('messages')
                   .orderBy('timestamp', 'desc')
-                  .limit(12);
-
+                  .limit(50);
 
   // Start listening to the query.
   query.onSnapshot(function(snapshot) {
@@ -477,25 +476,28 @@ function displayOrder(requester, customAddress, productPrice) {
   // orderContainerElement.querySelector('.customer-address').textContent = customAddress;
   orderContainerElement.querySelector('.product-price span').textContent = productPrice;
 
-  // 2. 오더를 수행하는 드라이버 정보
-  orderContainerElement.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(driver.picUrl) + ')';
+  // 디렉터로 로그인한 경우만, 오더를 수행하는 드라이버 정보를 노출
+  if(queryString.role === "director") {
+    // 2. 오더를 수행하는 드라이버 정보
+    orderContainerElement.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(driver.picUrl) + ')';
 
-  const nameElement = orderContainerElement.querySelector('.name');
-  nameElement.textContent = driver.name;
+    const nameElement = orderContainerElement.querySelector('.name');
+    nameElement.textContent = driver.name;
 
-  // 2-1. 드라이버의 태그를 삽입
-  const tags = getUserTags(driver.name);
-  tags.forEach(tag => {
-    const tagSpan = document.createElement('span');
-    tagSpan.textContent = tag;
-    nameElement.appendChild(tagSpan);
-  });
+    // 2-1. 드라이버의 태그를 삽입
+    const tags = getUserTags(driver.name);
+    tags.forEach(tag => {
+      const tagSpan = document.createElement('span');
+      tagSpan.textContent = tag;
+      nameElement.appendChild(tagSpan);
+    });
+  } else {
+    orderContainerElement.querySelector('.driver').classList.add('hide');
+  }
 
   // 99. 메시지 스크롤 리스트에 포함되는 상품요약정보
   const clone = orderContainerElement.cloneNode(true);
   messageListElement.querySelector('.spacing .inner-block').appendChild(clone);
-
-
 }
 
 function displayPreset({ parent, presetArr, callbackOnClick }) {
@@ -684,14 +686,12 @@ const classNameHide = 'hide';
 const classNameExtended = 'extended';
 const classNameShrunk = 'shrunk';
 function onFocusMessageInput(e) {
-  console.log('HERE - 1  / e:',e);
   presetBoxElement.classList.remove(classNameShow);
   messageBoxElement.classList.remove(classNameShrunk);
   presetBoxElement.classList.add(classNameHide);
   messageBoxElement.classList.add(classNameExtended);
 }
 function onBlurMessageInput() {
-  console.log('HERE - 2');
   presetBoxElement.classList.remove(classNameHide);
   messageBoxElement.classList.remove(classNameExtended);
   presetBoxElement.classList.add(classNameShow);
