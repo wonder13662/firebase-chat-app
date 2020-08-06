@@ -170,7 +170,7 @@ main, #messages-card {
 .message-container .message .balloon {
   background: white;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   border-top-left-radius: 0;
 }
@@ -180,7 +180,7 @@ main, #messages-card {
 .message-container.my-message .message .balloon {
   background: #FF8383;
   color: white;
-  border-top-left-radius: 10px;
+  border-top-left-radius: 15px;
   border-top-right-radius: 0;
 }
 .message-container .name {
