@@ -277,8 +277,7 @@ function loadMessages() {
         let hours = date.getHours()%12;
         hours = hours<10?`0${hours}`:`${hours}`;
         const minutes = date.getMinutes()<10?`0${date.getMinutes()}`:`${date.getMinutes()}`;
-        const seconds = date.getSeconds()<10?`0${date.getSeconds()}`:`${date.getSeconds()}`;
-        const timeStr = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getUTCDate()} ${hours}:${minutes}:${seconds} ${ampm}`;
+        const timeStr = `${hours}:${minutes} ${ampm}`;
 
         displayMessage(change.doc.id, message.timestamp, message.name,
                        message.text, message.profilePicUrl, message.imageUrl, timeStr);
@@ -481,7 +480,7 @@ function resetMaterialTextfield(element) {
 function displayOrder(requester, customAddress, productPrice) {
   // 1. 실제 보여지는 상단 고정된 상품요약정보
   orderContainerElement.querySelector('.requester').textContent = requester;
-  orderContainerElement.querySelector('.customer-address').textContent = customAddress;
+  // orderContainerElement.querySelector('.customer-address').textContent = customAddress;
   orderContainerElement.querySelector('.product-price span').textContent = productPrice;
 
   // 2. 메시지 스크롤 리스트에 포함되는 상품요약정보
@@ -675,7 +674,6 @@ function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
   // Show the card fading-in and scroll to view the new message.
   setTimeout(function() {div.classList.add('visible')}, 1);
   messageListElement.scrollTop = messageListElement.scrollHeight;
-  messageInputElement.focus();
 }
 
 // Enables or disables the submit button depending on the values of the input
@@ -686,6 +684,25 @@ function toggleButton() {
   } else {
     submitButtonElement.setAttribute('disabled', 'true');
   }
+}
+
+const classNameShow = 'show';
+const classNameHide = 'hide';
+const classNameExtended = 'extended';
+const classNameShrunk = 'shrunk';
+function onFocusMessageInput(e) {
+  console.log('HERE - 1  / e:',e);
+  presetBoxElement.classList.remove(classNameShow);
+  messageBoxElement.classList.remove(classNameShrunk);
+  presetBoxElement.classList.add(classNameHide);
+  messageBoxElement.classList.add(classNameExtended);
+}
+function onBlurMessageInput() {
+  console.log('HERE - 2');
+  presetBoxElement.classList.remove(classNameHide);
+  messageBoxElement.classList.remove(classNameExtended);
+  presetBoxElement.classList.add(classNameShow);
+  messageBoxElement.classList.add(classNameShrunk);
 }
 
 // Checks that the Firebase SDK has been correctly setup and configured.
@@ -702,7 +719,9 @@ checkSetup();
 
 // Shortcuts to DOM Elements.
 var orderContainerElement = document.getElementById('order-container');
+var presetBoxElement = document.getElementById('preset-box');
 var presetContainerElement = document.getElementById('presets');
+var messageBoxElement = document.getElementById('message-box');
 var messageListElement = document.getElementById('messages');
 var messageFormElement = document.getElementById('message-form');
 var messageInputElement = document.getElementById('message');
@@ -730,6 +749,8 @@ signInButtonElement.addEventListener('click', signIn);
 // Toggle for the button.
 messageInputElement.addEventListener('keyup', toggleButton);
 messageInputElement.addEventListener('change', toggleButton);
+messageInputElement.addEventListener('focus', onFocusMessageInput);
+messageInputElement.addEventListener('blur', onBlurMessageInput);
 
 // Events for image upload.
 imageButtonElement.addEventListener('click', function(e) {

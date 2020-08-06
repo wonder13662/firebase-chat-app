@@ -76,6 +76,12 @@ main, #messages-card {
   box-shadow: inset 2px 2px 10px rgba(174, 174, 192, 0.25), inset -2px -2px 2px rgba(255, 255, 255, 0.7), inset 2px 2px 2px rgba(174, 174, 192, 0.2);
   background: #F2F2F5;
 }
+#message-box.extended {
+  height: calc(100% - 72px);
+}
+#message-box.shrunk {
+  height: calc(100% - 140px);
+}
 #preset-box {
   position: relative;
   margin-top: 10px;
@@ -85,6 +91,12 @@ main, #messages-card {
   border-radius: 20px;
   box-shadow: inset 2px 2px 10px rgba(174, 174, 192, 0.25), inset -2px -2px 2px rgba(255, 255, 255, 0.7), inset 2px 2px 2px rgba(174, 174, 192, 0.2);
   background: #F2F2F5;
+}
+#preset-box.show {
+  display:block;
+}
+#preset-box.hide {
+  display:none;
 }
 #presets {
   padding: 15px 0px;
@@ -192,7 +204,6 @@ main, #messages-card {
   color: #bbb;
   font-size: 12px;
 }
-
 
 #message-form {
   display: flex;
@@ -358,9 +369,9 @@ header {
   border-top: 1px solid #e0e0e0;
   text-align: right;
   font-style: normal;
-  font-size: 1.3rem;
+  font-size: 1rem;
   line-height: 1rem;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 #order-container .product-price span {
   font-weight: bold;
