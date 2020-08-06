@@ -363,6 +363,9 @@ header {
 #order-container .driver {
   position: relative;
 }
+#order-container .driver.hide {
+  display: none;
+}
 #order-container .pic {
   position: absolute;
   top: 5px;
@@ -410,7 +413,7 @@ header {
   font-size: 1rem;
   line-height: 1rem;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0;
 }
 #order-container .product-price span {
   font-weight: bold;
