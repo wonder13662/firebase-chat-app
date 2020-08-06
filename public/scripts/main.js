@@ -512,34 +512,46 @@ function displayPreset({ parent, presetArr, callbackOnClick }) {
     spanElement.textContent = preset.name;
     presetContainerElement.appendChild(spanElement);
 
-    function removeEvents() {
-      spanElement.removeEventListener('click', this);
-      spanElement.removeEventListener('touchstart', this);
-      spanElement.removeEventListener('touchmove', this);
-      spanElement.removeEventListener('touchend', this);
-      spanElement.removeEventListener('touchcancel', this);
+    const removeEvents = () => {
+      spanElement.removeEventListener('click', callbackOnClickSpanElement);
+      spanElement.removeEventListener('touchstart', callbackOnTouchStart);
+      spanElement.removeEventListener('touchmove', callbackOnTouchMove);
+      spanElement.removeEventListener('touchcancel', callbackOnTouchCancel);
+      spanElement.removeEventListener('touchend', callbackOnTouchEnd);
     }
 
-    spanElement.addEventListener('click', function() {
-      callbackOnClick({ parent, preset });
-      removeEvents();
-    });
     let touchmove = false;
-    spanElement.addEventListener('touchstart', function() {
+    const callbackOnClickSpanElement = () => {
+      removeEvents();
+      callbackOnClick({ parent, preset });
+    }
+
+    const callbackOnTouchStart = () => {
       touchmove = false;
-    });
-    spanElement.addEventListener('touchmove', function() {
+    }
+
+    const callbackOnTouchMove = () => {
       touchmove = true;
-    });
-    spanElement.addEventListener('touchcancel', function() {
+    }
+
+    const callbackOnTouchCancel = () => {
       touchmove = false;
-    });
-    spanElement.addEventListener('touchend', function() {
+    }
+
+    const callbackOnTouchEnd = () => {
       if(!touchmove) {
-        callbackOnClick({ parent, preset });
         removeEvents();
+        callbackOnClick({ parent, preset });
       }
-    });
+    }
+
+    setTimeout(() => {
+      spanElement.addEventListener('click', callbackOnClickSpanElement);
+      spanElement.addEventListener('touchstart', callbackOnTouchStart);
+      spanElement.addEventListener('touchmove', callbackOnTouchMove);
+      spanElement.addEventListener('touchcancel', callbackOnTouchCancel);
+      spanElement.addEventListener('touchend', callbackOnTouchEnd);
+    }, 250)
   });
 }
 
@@ -784,14 +796,16 @@ function onClick1DepthPreset({ parent, preset }) {
   } else {
     // Send message as Preset
     if(preset.name !== 'Home') {
-      saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+      alert(preset.name);
+      // saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
     }
   }
 }
 function onClick2DepthPreset({ parent, preset }) {
   // Send message as Preset
   if(preset.name !== 'Home') {
-    saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+    alert(parent?`${parent.name} - ${preset.name}`:preset.name);
+    // saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
   }
   // Draw 1 depth preset
   displayPreset({
