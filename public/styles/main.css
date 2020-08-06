@@ -63,13 +63,13 @@ main, #messages-card {
   padding-bottom: 0;
 }
 #message-box-container {
-  padding: 0px 10px;
+  padding: 0px 5px;
 }
 #message-box {
   position: relative;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 0px 20px;
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding: 0px 5px;
   height: calc(100% - 140px);
   overflow: hidden;
   border-radius: 20px;
@@ -80,7 +80,7 @@ main, #messages-card {
   height: calc(100% - 72px);
 }
 #message-box.shrunk {
-  height: calc(100% - 140px);
+  height: calc(100% - 100px);
 }
 #preset-box {
   position: relative;
@@ -122,7 +122,7 @@ main, #messages-card {
 #messages > .spacing {
   width: 100%;
   background: transparent;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 #messages > .spacing > .inner-block > #order-container {
@@ -137,6 +137,9 @@ main, #messages-card {
 
 .message-container {
   position: relative;
+}
+.message-container:last-child {
+  margin-bottom: 5px;
 }
 .message-container.my-message {
   text-align: right;
@@ -343,11 +346,11 @@ header {
 }
 #order-container{
   position: absolute;
-  width: calc(100% - 60px);
+  width: calc(100% - 40px);
   background: #fff;
   padding: 10px;
-  margin: 20px;
-  border-radius: 10px;
+  margin: 10px;
+  border-radius: 15px;
   box-shadow: 1.5px 2px 5px rgba(155, 155, 170, 0.4);
   z-index: 100;
 }
