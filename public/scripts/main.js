@@ -171,6 +171,16 @@ const presets = [
   }
 ];
 
+// Users
+const driver = {
+  name:'김드라이버',
+  picUrl:'https://lh3.googleusercontent.com/a-/AOh14Gj_w9gwi_x7lGM3vD2nVbJeNcVFKphj6nts0VAH?sz=150'
+};
+const director = {
+  name:'박디렉터',
+  picUrl:'https://lh3.googleusercontent.com/a-/AOh14GjZE8TMfjINdjyBUbula7u7n61gCe0W56PntZhq?sz=150'
+};
+
 // Signs-in Friendly Chat.
 function signIn() {
   // signInByGoogleAccount();
@@ -388,22 +398,6 @@ function onMediaFileSelected(event) {
   }
 }
 
-// Toggle when an user clicked the order summary
-function onOrderSummaryClicked(e) {
-  console.log('onOrderSummaryClicked');
-
-  const classNameShrunk = "shrunk";
-  const classNameExpanded = "expanded";
-
-  if(orderContainerElement.classList.contains(classNameShrunk)) {
-    orderContainerElement.classList.remove(classNameShrunk);
-    orderContainerElement.classList.add(classNameExpanded);
-  } else if(orderContainerElement.classList.contains(classNameExpanded)) {
-    orderContainerElement.classList.remove(classNameExpanded);
-    orderContainerElement.classList.add(classNameShrunk);
-  }
-}
-
 // Triggered when the send new message form is submitted.
 function onMessageFormSubmit(e) {
   e.preventDefault();
@@ -483,9 +477,25 @@ function displayOrder(requester, customAddress, productPrice) {
   // orderContainerElement.querySelector('.customer-address').textContent = customAddress;
   orderContainerElement.querySelector('.product-price span').textContent = productPrice;
 
-  // 2. 메시지 스크롤 리스트에 포함되는 상품요약정보
+  // 2. 오더를 수행하는 드라이버 정보
+  orderContainerElement.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(driver.picUrl) + ')';
+
+  const nameElement = orderContainerElement.querySelector('.name');
+  nameElement.textContent = driver.name;
+
+  // 2-1. 드라이버의 태그를 삽입
+  const tags = getUserTags(driver.name);
+  tags.forEach(tag => {
+    const tagSpan = document.createElement('span');
+    tagSpan.textContent = tag;
+    nameElement.appendChild(tagSpan);
+  });
+
+  // 99. 메시지 스크롤 리스트에 포함되는 상품요약정보
   const clone = orderContainerElement.cloneNode(true);
   messageListElement.querySelector('.spacing .inner-block').appendChild(clone);
+
+
 }
 
 function displayPreset({ parent, presetArr, callbackOnClick }) {
@@ -534,22 +544,24 @@ function displayPreset({ parent, presetArr, callbackOnClick }) {
 // Template for messages.
 const OTHER_MESSAGE_TEMPLATE =
 '<div class="message-container">' +
-  '<div class="pic"></div>' +
-  '<div class="info-box">' +
-    '<div class="name"></div>' +
-    '<div class="message">' +
-      '<div class="balloon"></div>' +
+  '<div class="message">' +
+    '<div class="balloon"></div>' +
+    '<div class="timestamp-box">' +
+      '<div class="timestamp"></div>' +
     '</div>' +
-    '<div class="timestamp"></div>' +
   '</div>' +
 '</div>';
 
 const MY_MESSAGE_TEMPLATE =
 '<div class="message-container my-message">' +
   '<div class="message">' +
-  '<div class="balloon"></div>' +
+    '<div class="timestamp-box">' +
+      '<div class="timestamp"></div>' +
     '</div>' +
-  '<div class="timestamp"></div>' +
+    '<div class="balloon"></div>' +
+  '</div>' +
+'</div>' +
+
 '</div>';
 
 // Adds a size to Google Profile pics URLs.
@@ -625,38 +637,19 @@ function createAndInsertMessage(id, timestamp, template) {
 }
 
 // Displays a Message in the UI.
-function displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
-  var div = document.getElementById(id) || createAndInsertOtherMessage(id, timestamp);
-
-  // profile picture
-  if (picUrl) {
-    div.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(picUrl) + ')';
-  }
-
-  const nameElement = div.querySelector('.name');
-  nameElement.textContent = name;
-
-  // insert user tags
-  const tags = getUserTags(name);
-  // const tagsElement = div.querySelector('.tags');
-  tags.forEach(tag => {
-    const tagSpan = document.createElement('span');
-    tagSpan.textContent = tag;
-    nameElement.appendChild(tagSpan);
-  });
-
-  return div;
+function displayOtherMessage({ id, timestamp, name, picUrl }) {
+  return document.getElementById(id) || createAndInsertOtherMessage(id, timestamp);
 }
-function displayMyMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
+function displayMyMessage({ id, timestamp }) {
   return document.getElementById(id) || createAndInsertMyMessage(id, timestamp);
 }
 function displayMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr) {
   const currentUserDisplayName = getUserName();
   let div = null;
   if(name === currentUserDisplayName) {
-    div = displayMyMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
+    div = displayMyMessage({ id, timestamp });
   } else {
-    div = displayOtherMessage(id, timestamp, name, text, picUrl, imageUrl, timeStr);
+    div = displayOtherMessage({ id, timestamp, name, picUrl });
   }
 
   // 공통 속성 처리
@@ -735,9 +728,6 @@ var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
-// Toggle for the order summary
-orderContainerElement.addEventListener('click', onOrderSummaryClicked);
-
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);
 submitButtonElement.addEventListener("touchend", onMessageFormSubmit, false);
@@ -749,8 +739,8 @@ signInButtonElement.addEventListener('click', signIn);
 // Toggle for the button.
 messageInputElement.addEventListener('keyup', toggleButton);
 messageInputElement.addEventListener('change', toggleButton);
-messageInputElement.addEventListener('focus', onFocusMessageInput);
-messageInputElement.addEventListener('blur', onBlurMessageInput);
+// messageInputElement.addEventListener('focus', onFocusMessageInput);
+// messageInputElement.addEventListener('blur', onBlurMessageInput);
 
 // Events for image upload.
 imageButtonElement.addEventListener('click', function(e) {

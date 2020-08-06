@@ -142,7 +142,6 @@ main, #messages-card {
 
 .message-container {
   position: relative;
-  margin-bottom: 10px;
 }
 .message-container.my-message {
   text-align: right;
@@ -168,13 +167,14 @@ main, #messages-card {
 .message-container .message {
   display: block;
   width: calc(100% - 40px);
-  padding: 5px 0;
+  padding: 5px 0 0 0;
 }
 .message-container .message .balloon {
   background: white;
   padding: 10px;
   border-radius: 10px;
   display: inline-block;
+  border-top-left-radius: 0;
 }
 .message-container.my-message .message {
   width: 100%;
@@ -182,6 +182,8 @@ main, #messages-card {
 .message-container.my-message .message .balloon {
   background: #FF8383;
   color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 0;
 }
 .message-container .name {
   display: block;
@@ -200,11 +202,18 @@ main, #messages-card {
   border-radius: 15px;
   margin: 0 0 0 5px;
 }
+.message-container .timestamp-box {
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  width: 50px;
+}
 .message-container .timestamp {
   color: #bbb;
   font-size: 12px;
+  position: absolute;
+  bottom: -16px;
 }
-
 #message-form {
   display: flex;
   flex-direction: row;
@@ -347,14 +356,45 @@ header {
   box-shadow: 1.5px 2px 5px rgba(155, 155, 170, 0.4);
   z-index: 100;
 }
-#order-container.shrunk .detail {
-  display:none;
-}
 #order-container .requester {
   font-style: normal;
   font-weight: bold;
   font-size: 1.3rem;
   line-height: 2rem;
+}
+#order-container .driver {
+  position: relative;
+}
+#order-container .pic {
+  position: absolute;
+  top: 5px;
+  background-image: url('/images/profile_placeholder.png');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  background-size: 30px;
+  border-radius: 20px;
+}
+#order-container .info-box {
+  display: inline-block;
+  padding: 10px 10px 0px 40px;
+}
+#order-container .info-box .name {
+  display: block;
+  width: 100%;
+  color: #bbb;
+  font-style: italic;
+  font-size: 12px;
+  box-sizing: border-box;
+  padding-bottom: 5px;
+}
+#order-container .info-box .name span {
+  padding: 5px;
+  font-style: normal;
+  background-color: #b5b5b5;
+  color: white;
+  border-radius: 15px;
+  margin: 0 0 0 5px;
 }
 
 #order-container .customer-address {
@@ -372,6 +412,7 @@ header {
   font-size: 1rem;
   line-height: 1rem;
   padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 #order-container .product-price span {
   font-weight: bold;
