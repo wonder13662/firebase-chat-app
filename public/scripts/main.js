@@ -796,16 +796,14 @@ function onClick1DepthPreset({ parent, preset }) {
   } else {
     // Send message as Preset
     if(preset.name !== 'Home') {
-      alert(preset.name);
-      // saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+      saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
     }
   }
 }
 function onClick2DepthPreset({ parent, preset }) {
   // Send message as Preset
   if(preset.name !== 'Home') {
-    alert(parent?`${parent.name} - ${preset.name}`:preset.name);
-    // saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
+    saveMessage(parent?`${parent.name} - ${preset.name}`:preset.name);
   }
   // Draw 1 depth preset
   displayPreset({
@@ -827,4 +825,12 @@ function getQueryStringObject() {
           b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
   }
   return b;
+}
+
+// Softkeyboard 노출로 Window의 높이가 줄어들 때의 메시지 리스트의 scrollTop 제어
+let prevWindowHeight = window.innerHeight;
+window.onresize = () => {
+  const diff = prevWindowHeight - window.innerHeight;
+  prevWindowHeight = window.innerHeight;
+  messageListElement.scrollTop += diff;
 }
