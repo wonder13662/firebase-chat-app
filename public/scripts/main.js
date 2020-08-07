@@ -835,5 +835,9 @@ let prevWindowHeight = window.innerHeight;
 window.onresize = () => {
   const diff = prevWindowHeight - window.innerHeight;
   prevWindowHeight = window.innerHeight;
-  messageListElement.scrollTop += diff;
+
+  // 가장 아래로 스크롤된 경우가 아닐 경우에만 스크롤 위치 이동
+  if(messageBoxElement.offsetHeight + messageListElement.scrollTop != messageListElement.scrollHeight) {
+    messageListElement.scrollTop += diff;
+  }
 }
